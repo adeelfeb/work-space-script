@@ -209,3 +209,91 @@ Refresh and add it to the Dock the same way.
 ✔ Reusable & expandable
 ✔ No third-party daemons
 ✔ Safe for daily use
+
+
+```bash
+#!/bin/bash
+
+# -------------------------------
+# Reading Books Workspace Script
+# -------------------------------
+# This script sets up 3 workspaces in Ubuntu and opens specific applications
+# in each workspace in the desired order.
+# Workspace assignments:
+# Workspace 1 → Brave
+# Workspace 3 → Google Chrome (Profile 3)
+# Workspace 2 → Cursor + Microsoft Edge
+# -------------------------------
+
+# Ensure 3 workspaces exist (creates them if not)
+wmctrl -n 3
+
+############################
+# Workspace 3 — Chrome (Profile 3)
+############################
+# Open Google Chrome using Profile 3
+google-chrome --profile-directory="Profile 3" &
+# Give it some time to launch
+sleep 8
+# Move the Chrome window to workspace index 2 (third workspace, 0-based index)
+wmctrl -r "Google Chrome" -t 2
+
+############################
+# Workspace 1 — Brave
+############################
+# Switch to workspace 0 (first workspace)
+wmctrl -s 0
+sleep 1
+# Open Brave browser
+brave-browser &
+sleep 6
+# Move Brave window explicitly to workspace 0
+wmctrl -r "Brave" -t 0
+
+############################
+# Workspace 2 — Cursor + Microsoft Edge
+############################
+# Switch to workspace 1 (second workspace)
+wmctrl -s 1
+sleep 1
+# Open Cursor
+cursor &
+sleep 6
+# Move Cursor window to workspace 1
+wmctrl -r "Cursor" -t 1
+
+# Open Microsoft Edge
+microsoft-edge-stable &
+sleep 6
+# Move Edge window to workspace 1
+wmctrl -r "Microsoft Edge" -t 1
+```
+
+---
+
+### ✅ How it works
+
+1. `wmctrl -n 3` → ensures **3 workspaces exist**.
+
+2. Each section:
+
+   * Opens the application
+   * Waits (`sleep`) for it to launch properly
+   * Moves the window to the correct workspace using `wmctrl -r "Window Name" -t <index>`
+
+3. Workspace indexes in `wmctrl` start at `0`, so:
+
+   * 0 → Workspace 1
+   * 1 → Workspace 2
+   * 2 → Workspace 3
+
+4. The launch **order** in the script:
+
+   1. Chrome in workspace 3
+   2. Brave in workspace 1
+   3. Cursor + Edge in workspace 2
+
+This order ensures your applications open in the exact workspace you want and don’t get moved incorrectly by the system.
+
+---
+
